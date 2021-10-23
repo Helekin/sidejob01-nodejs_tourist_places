@@ -20,7 +20,7 @@ exports.userRegister = asyncHandler(async (req, res) => {
     password,
   });
 
-  const user = await User.findById(newUser._id).selected("-password");
+  const user = await User.findById(newUser._id).select("-password");
 
   if (user) {
     res.status(201).json(user);
@@ -53,7 +53,7 @@ exports.updateUserImage = asyncHandler(async (req, res) => {
     { _id: req.user._id },
     { $set: { image: image } },
     { new: true, upsert: true }
-  ).selected("-password");
+  ).select("-password");
 
   if (user) {
     res.status(201).json(user);
