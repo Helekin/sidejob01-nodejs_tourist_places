@@ -20,7 +20,8 @@ if (process.env.NODE_ENV === "development") {
 }
 
 const options = {
-  origin: "*",
+  origin: true,
+  credentials: true,
 };
 
 app.use(cors(options));
