@@ -19,11 +19,7 @@ if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 
-const options = {
-  origin: "*",
-};
-
-app.use(cors(options));
+app.use(cors());
 
 app.use(express.json());
 
