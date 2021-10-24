@@ -46,6 +46,17 @@ exports.userLogin = asyncHandler(async (req, res) => {
   }
 });
 
+exports.getCurrentUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id).select("-password");
+
+  if (user) {
+    res.json(user);
+  } else {
+    res.status(400);
+    throw new Error("Usuario no encontrado");
+  }
+});
+
 exports.updateUserImage = asyncHandler(async (req, res) => {
   const { image } = req.body;
 
