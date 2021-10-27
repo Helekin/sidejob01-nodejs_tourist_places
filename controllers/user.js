@@ -38,6 +38,9 @@ exports.userLogin = asyncHandler(async (req, res) => {
       username: user.username,
       email: user.email,
       isAdmin: user.isAdmin,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+      image: user.image,
       token: generateToken(user._id, user.isAdmin),
     });
   } else {
