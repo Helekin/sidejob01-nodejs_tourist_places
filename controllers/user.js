@@ -37,10 +37,10 @@ exports.userLogin = asyncHandler(async (req, res) => {
       _id: user._id,
       username: user.username,
       email: user.email,
+      image: user.image,
       isAdmin: user.isAdmin,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
-      image: user.image,
       token: generateToken(user._id, user.isAdmin),
     });
   } else {
