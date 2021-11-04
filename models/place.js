@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const placesSchema = mongoose.Schema(
+const placeSchema = mongoose.Schema(
   {
     name: {
       type: String,
@@ -16,6 +16,15 @@ const placesSchema = mongoose.Schema(
       type: String,
       default: null,
     },
+    price: {
+      type: Number,
+      default: null,
+    },
+    activities: [
+      {
+        type: String,
+      },
+    ],
     location: {
       type: { type: String, enums: ["Point"], required: true },
       coordinates: { type: [Number], required: true },
@@ -24,12 +33,20 @@ const placesSchema = mongoose.Schema(
       type: "String",
       required: true,
     },
+    phone: {
+      type: String,
+      default: null,
+    },
+    cellphone: {
+      type: String,
+      default: null,
+    },
   },
   {
     timestamps: true,
   }
 );
 
-const Places = mongoose.model("places", placesSchema);
+const Place = mongoose.model("places", placeSchema);
 
-module.exports = Places;
+module.exports = Place;

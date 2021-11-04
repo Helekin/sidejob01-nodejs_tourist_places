@@ -8,6 +8,7 @@ const connectDB = require("./config/db");
 const { errorHandler, notFoundHandler } = require("./middleware/error");
 
 const userRoutes = require("./routes/user");
+const placeRoutes = require("./routes/place");
 
 dotenv.config();
 
@@ -26,6 +27,7 @@ app.options("*", cors());
 app.use(express.json());
 
 app.use("/api/users", userRoutes);
+app.use("/api/places", placeRoutes);
 
 app.get("/", (req, res) => {
   res.send("API is running");
