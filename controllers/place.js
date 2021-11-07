@@ -90,7 +90,7 @@ exports.deletePlace = asyncHandler(async (req, res) => {
 
 exports.getAllPlaces = asyncHandler(async (req, res) => {
   const pageNumber = Number(req.query.pageNumber) || 1;
-  const pageSize = Number(req.query.pagesize) || 5;
+  const pageSize = Number(req.query.pagesize) || 10;
 
   const totalDocuments = await Place.countDocuments();
 
