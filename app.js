@@ -9,6 +9,8 @@ const { errorHandler, notFoundHandler } = require("./middleware/error");
 
 const userRoutes = require("./routes/user");
 const placeRoutes = require("./routes/place");
+const reviewRoutes = require("./routes/review");
+const favoriteRoutes = require("./routes/favorite");
 
 dotenv.config();
 
@@ -28,6 +30,8 @@ app.use(express.json());
 
 app.use("/api/users", userRoutes);
 app.use("/api/places", placeRoutes);
+app.use("/api/reviews", reviewRoutes);
+app.use("/api/favorites", favoriteRoutes);
 
 app.get("/", (req, res) => {
   res.send("API is running");

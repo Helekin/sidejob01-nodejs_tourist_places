@@ -91,10 +91,18 @@ exports.deletePlace = asyncHandler(async (req, res) => {
 exports.getAllPlaces = asyncHandler(async (req, res) => {
   const pageNumber = Number(req.query.pagenumber) || 1;
   const pageSize = Number(req.query.pagesize) || 10;
+  const keyword = req.query.keyword
+    ? {
+        name: {
+          $regex: req.query.keyword,
+          $options: "i",
+        },
+      }
+    : {};
 
-  const totalDocuments = await Place.countDocuments();
+  const totalDocuments = await Place.countDocuments({ ...keyword });
 
-  const places = await Place.find()
+  const places = await Place.find({ ...keyword })
     .limit(pageSize)
     .skip(pageSize * (pageNumber - 1))
     .sort({ createdAt: -1 });
