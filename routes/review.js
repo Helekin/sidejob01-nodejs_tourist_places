@@ -9,6 +9,8 @@ router.get("/", reviewController.getReviews);
 
 router.get("/me/:id", [protection], reviewController.getMyReview);
 
+router.get("/rating/:id", reviewController.getTotalRatingOfAPlace);
+
 router.post("/", [protection], reviewController.createReview);
 
 router.delete("/:id", [protection], reviewController.deleteMyReview);

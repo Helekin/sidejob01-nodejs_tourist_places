@@ -1,4 +1,5 @@
 const asyncHandler = require("express-async-handler");
+const mongoose = require("mongoose");
 
 const Review = require("../models/review");
 
@@ -18,6 +19,27 @@ exports.createReview = asyncHandler(async (req, res) => {
   } else {
     res.status(400);
     throw new Error("La reseña no pudo ser creada");
+  }
+});
+
+exports.getTotalRatingOfAPlace = asyncHandler(async (req, res) => {
+  const review = await Review.aggregate([
+    { $match: { place: mongoose.Types.ObjectId(req.params.id) } },
+    {
+      $group: {
+        _id: null,
+        avgRating: { $avg: "$rating" },
+      },
+    },
+  ]);
+
+  if (review.length > 0) {
+    res.json(review[0]);
+  } else {
+    res.json({
+      _id: null,
+      avgRating: 0,
+    });
   }
 });
 
