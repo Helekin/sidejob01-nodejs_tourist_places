@@ -35,17 +35,13 @@ exports.getMyPlaceFromFavoritesById = asyncHandler(async (req, res) => {
 
 exports.deletePlaceFromFavorites = asyncHandler(async (req, res) => {
   const favoriteExists = await Favorite.findOne({
-    _id: req.params.id,
+    user: req.user._id,
+    place: req.params.id,
   });
 
   if (!favoriteExists) {
     res.status(404);
     throw new Error("Lugar favorito no encontrado");
-  }
-
-  if (favoriteExists.user.toString() !== req.user._id.toString()) {
-    res.status(403);
-    throw new Error("No se puede borrar el lugar favorito de otro usuario");
   }
 
   await Favorite.findByIdAndRemove(favoriteExists._id);
