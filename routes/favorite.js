@@ -5,10 +5,16 @@ const { protection } = require("../middleware/auth");
 
 const favoriteController = require("../controllers/favorite");
 
-router.get("/me", [protection], favoriteController.getMyFavorites);
+router.get("/me", [protection], favoriteController.getMyPlacesFromFavorites);
 
-router.post("/", [protection], favoriteController.addToFavorites);
+router.get("/me/:id", [protection], favoriteController.getMyPlaceFromFavoritesById);
 
-router.delete("/:id", [protection], favoriteController.deleteFromFavorites);
+router.post("/", [protection], favoriteController.addPlaceToFavorites);
+
+router.delete(
+  "/:id",
+  [protection],
+  favoriteController.deletePlaceFromFavorites
+);
 
 module.exports = router;

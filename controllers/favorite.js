@@ -2,7 +2,7 @@ const asyncHandler = require("express-async-handler");
 
 const Favorite = require("../models/favorite");
 
-exports.addToFavorites = asyncHandler(async (req, res) => {
+exports.addPlaceToFavorites = asyncHandler(async (req, res) => {
   const { place } = req.body;
 
   const favorite = await Favorite.create({
@@ -18,13 +18,22 @@ exports.addToFavorites = asyncHandler(async (req, res) => {
   }
 });
 
-exports.getMyFavorites = asyncHandler(async (req, res) => {
+exports.getMyPlacesFromFavorites = asyncHandler(async (req, res) => {
   const favorites = await Favorite.find({ user: req.user._id });
 
   res.json(favorites);
 });
 
-exports.deleteFromFavorites = asyncHandler(async (req, res) => {
+exports.getMyPlaceFromFavoritesById = asyncHandler(async (req, res) => {
+  const favorite = await Favorite.findOne({
+    user: req.user._id,
+    place: req.params.id,
+  });
+
+  res.json(favorite);
+});
+
+exports.deletePlaceFromFavorites = asyncHandler(async (req, res) => {
   const favoriteExists = await Favorite.findOne({
     _id: req.params.id,
   });
