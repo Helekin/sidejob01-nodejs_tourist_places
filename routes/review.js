@@ -7,9 +7,11 @@ const reviewController = require("../controllers/review");
 
 router.get("/", reviewController.getReviews);
 
-router.get("/me/:id", [protection], reviewController.getMyReview);
+router.get("/:id", reviewController.getReviewsByPlaceId);
 
-router.get("/rating/:id", reviewController.getTotalRatingOfAPlace);
+router.get("/me/:id", [protection], reviewController.getMyReviewByPlaceId);
+
+router.get("/rating/:id", reviewController.getTotalRatingByPlaceId);
 
 router.post("/", [protection], reviewController.createReview);
 

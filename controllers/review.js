@@ -22,7 +22,31 @@ exports.createReview = asyncHandler(async (req, res) => {
   }
 });
 
-exports.getTotalRatingOfAPlace = asyncHandler(async (req, res) => {
+exports.getReviews = asyncHandler(async (req, res) => {
+  const reviews = await Review.find().populate("user", "image");
+
+  res.json(reviews);
+});
+
+exports.getMyReviewByPlaceId = asyncHandler(async (req, res) => {
+  const review = await Review.findOne({
+    place: req.params.id,
+    user: req.user._id,
+  });
+
+  res.json(review);
+});
+
+exports.getReviewsByPlaceId = asyncHandler(async (req, res) => {
+  const reviews = await Review.find({ place: req.params.id }).populate(
+    "user",
+    "image"
+  );
+
+  res.send(reviews);
+});
+
+exports.getTotalRatingByPlaceId = asyncHandler(async (req, res) => {
   const review = await Review.aggregate([
     { $match: { place: mongoose.Types.ObjectId(req.params.id) } },
     {
@@ -41,28 +65,6 @@ exports.getTotalRatingOfAPlace = asyncHandler(async (req, res) => {
       avgRating: 0,
     });
   }
-});
-
-exports.getReviews = asyncHandler(async (req, res) => {
-  const reviews = await Review.find().populate("user", "image");
-
-  res.json(reviews);
-});
-
-exports.getMyReview = asyncHandler(async (req, res) => {
-  const reviewExists = await Review.findOne({ _id: req.params.id });
-
-  if (!reviewExists) {
-    res.status(404);
-    throw new Error("Reseña no encontrada");
-  }
-
-  if (reviewExists.user.toString() !== req.user._id.toString()) {
-    res.status(403);
-    throw new Error("No se puede mostrar la reseña de otro usuario");
-  }
-
-  res.json(reviewExists);
 });
 
 exports.deleteMyReview = asyncHandler(async (req, res) => {
