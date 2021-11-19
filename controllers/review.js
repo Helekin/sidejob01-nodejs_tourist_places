@@ -48,24 +48,36 @@ exports.getReviewsByPlaceId = asyncHandler(async (req, res) => {
 });
 
 exports.getTopPlaces = asyncHandler(async (req, res) => {
-  const review = await Review.aggregate([
+  const reviews = await Review.aggregate([
     {
       $group: {
         _id: "$place",
         avgRating: { $avg: "$rating" },
       },
     },
-  ]).limit(5);
-
-  const placesId = [];
-
-  review.forEach((element) => {
-    placesId.push(element._id);
-  });
-
-  const places = await Place.aggregate([
-    { $match: { _id: { $in: placesId } } },
+    {
+      $lookup: {
+        from: "places",
+        localField: "_id",
+        foreignField: "_id",
+        as: "place",
+      },
+    },
+    { $sort: { avgRating: -1 } },
+    { $limit: 5 },
   ]);
+
+  const places = [];
+
+  reviews.forEach((element) => {
+    places.push({
+      _id: element._id,
+      rating: element.avgRating,
+      name: element.place[0].name,
+      description: element.place[0].description,
+      images: element.place[0].images,
+    });
+  });
 
   res.json(places);
 });
