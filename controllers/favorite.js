@@ -19,7 +19,9 @@ exports.addPlaceToFavorites = asyncHandler(async (req, res) => {
 });
 
 exports.getMyPlacesFromFavorites = asyncHandler(async (req, res) => {
-  const favorites = await Favorite.find({ user: req.user._id });
+  const favorites = await Favorite.find({ user: req.user._id })
+    .populate("place")
+    .sort({ createdAt: -1 });
 
   res.json(favorites);
 });
