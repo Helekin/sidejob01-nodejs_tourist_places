@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 const mongoose = require("mongoose");
 
 const Review = require("../models/review");
+const Place = require("../models/place");
 
 exports.createReview = asyncHandler(async (req, res) => {
   const { title, review, rating, place } = req.body;
@@ -44,6 +45,29 @@ exports.getReviewsByPlaceId = asyncHandler(async (req, res) => {
   );
 
   res.send(reviews);
+});
+
+exports.getTopPlaces = asyncHandler(async (req, res) => {
+  const review = await Review.aggregate([
+    {
+      $group: {
+        _id: "$place",
+        avgRating: { $avg: "$rating" },
+      },
+    },
+  ]).limit(5);
+
+  const placesId = [];
+
+  review.forEach((element) => {
+    placesId.push(element._id);
+  });
+
+  const places = await Place.aggregate([
+    { $match: { _id: { $in: placesId } } },
+  ]);
+
+  res.json(places);
 });
 
 exports.getTotalRatingByPlaceId = asyncHandler(async (req, res) => {
